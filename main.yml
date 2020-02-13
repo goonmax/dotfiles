@@ -1,0 +1,21 @@
+---
+- hosts: localhost
+  become: true 
+  task:
+  - name: Upgrade all installed packages for Debian and Ubuntu 
+    apt: 
+      name: "*"
+      state: latest
+      update_cache: yes
+      force_apt_get: yes
+      when: ansible_distribution == Ubuntu or ansible_distribution == "Debian"
+    - name: Upgrade all isntalled paclages for CentOS
+      yum:
+        name: '*'
+        state: latest
+        when: ansible_distribution == "CentOS"
+    - name: Upgrade all installed packages for openSUSE
+      zypper:
+        name: '*'
+        state: lastest
+      when: ansible_distribution == "openSUSE Leap:"
