@@ -1,0 +1,26 @@
+---      
+- hosts: localhost      
+  become: true      
+  tasks:      
+  - name: turn on ssh      
+    systemd:      
+      name: sshd      
+      enabled: yes      
+      state: started      
+  - name: Run and set up proxy      
+    command: echo "http_proxy=http://proxy.eng.apac.ngint.com:80" >> /etc/environment      
+      
+      
+  - name: Run and set up proxy      
+    command: echo "https_proxy=http://proxy.eng.apac.ngint.com:80" >> /etc/environment      
+      
+      
+  - name: Run and set up proxy      
+    command: echo -e 'Acquire::http::Proxy\n"http://proxy.eng.apac.ngint.com:80";' >> /etc/apt/apt.conf.d
+      
+      
+  - name: set date/time      
+    command: echo "NTP=admin.m5netsec.com.au admin-replicate.com.au" >> /etc/systemd/timesyncd.conf      
+      
+  - name: saving date and time      
+    command: systemctl restart systemd-timesyncd   
