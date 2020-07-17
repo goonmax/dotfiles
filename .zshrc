@@ -5,7 +5,7 @@ export ZSH="/home/che/.oh-my-zsh"
 # Enable colors and change prompt:
  autoload -U colors && colors
  PS1="%B%{$fg[red]%}[%{$fg[yellow]%}%n%{$fg[green]%}@%{$fg[blue]%}%M %{$fg[magenta]%}%~%{$fg[red]%}]%{$reset_color%}$%b "
-
+export DOCKER_HOST=tcp://127.0.0.1:23750
 
 #vim mode
 bindkey -v
@@ -29,16 +29,17 @@ bindkey '^e' edit-command-line
 
 
 if command -v tmux>/dev/null; then
-        [ -z $TMUX  ] && exec tmux
+    [ -z $TMUX  ] && exec tmux
 else
-        echo "tmux not installed. Run ./deploy to configure dependencies"
+    echo "tmux not installed. Run ./deploy to configure dependencies"
 fi
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
-ZSH_THEME="robbyrussell"
+ZSH_THEME="dallas"
+
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
 # a theme from this variable instead of looking in ~/.oh-my-zsh/themes/
@@ -80,6 +81,7 @@ ZSH_THEME="robbyrussell"
 # under VCS as dirty. This makes repository status check for large repositories
 # much, much faster.
 # DISABLE_UNTRACKED_FILES_DIRTY="true"
+
 # Uncomment the following line if you want to change the command execution time
 # stamp shown in the history command output.
 # You can set one of the optional three formats:
@@ -128,3 +130,7 @@ source $ZSH/oh-my-zsh.sh
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 export FZF_DEFAULTS_OPS="--extended"
+
+#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
+export SDKMAN_DIR="/home/che/.sdkman"
+[[ -s "/home/che/.sdkman/bin/sdkman-init.sh" ]] && source "/home/che/.sdkman/bin/sdkman-init.sh"
