@@ -4,7 +4,7 @@ set ai
 set ruler
 set paste
 highlight Comment ctermfg=green
-set background=dark
+"set background=dark
 set nocompatible
 set hidden
 set nowrap        " don't wrap lines
@@ -27,7 +27,7 @@ syntax enable
 let mapleader      = ","
 let maplocalleader = ","
 "VIMRC edit
-nnoremap <leader>vrc :edit ~/.vimrc<CR>
+nnoremap <leader>vrc :edit ~/.vim/vimrc<CR>
 set t_Co=256
 nnoremap <C-l> :nohl<CR><C-l>:echo "Search Cleared"<CR>
 nnoremap <C-c> :set norelativenumber<CR>:set nonumber<CR>:echo "Line numbers turned off."<C
