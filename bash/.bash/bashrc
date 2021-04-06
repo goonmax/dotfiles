@@ -1,0 +1,38 @@
+# .bashrc
+# History control
+HISTCONTROL=ignoredups:ignorespace
+HISTSIZE=100000
+HISTFILESIZE=2000000
+shopt -s histappend
+# Personal binaries
+export PATH=${PATH}:~/bin:~/.local/bin:~/etc/scripts
+
+# Source global definitions
+if [ -f /etc/bashrc ]; then
+	. /etc/bashrc
+fi
+
+function gitPrompt {
+  command -v __git_ps1 > /dev/null && __git_ps1 " (%s)"
+}
+
+# Red name for root
+if [ "${UID}" -eq "0" ]; then
+  nameC="${txtred}"
+fi
+
+alias grep='grep --color=auto'
+alias ls='ls --color'
+alias ll='ls -lar'
+alias l='ls -a'
+
+export CLICOLOR=1
+# Change to your name, do not delete backslashes
+export PS1="killaG0rilla\[\e[31m\] \[\e[m\]\[\e[31m\]:\[\e[m\]\[\e[31m\]:\[\e[m\] \[\e[32m\]\w\[\e[m\] \[\e[34m\]»\[\e[m\] "
+
+export LSCOLORS=cxgxfxexbxegedabagacad
+
+export EDITOR='vim'
+
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+source $GOPATH/src/github.com/tomnomnom/gf/gf-completion.bash
