@@ -4,7 +4,6 @@ set expandtab
 set ai
 set ruler
 set paste
-"set background=dark
 set nocompatible
 set hidden
 set nowrap        " don't wrap lines
@@ -22,6 +21,12 @@ set smarttab      " insert tabs on the start of a line according to
 set hlsearch      " highlight search terms
 set incsearch     " show search matches as you type
 syntax enable
+
+
+" Setting the RUNETIMEPATH
+let $RTP=split(&runtimepath, ',')[0]
+let $RC="HOME/.vim/vimrc"
+set path=.,**
 
 highlight Comment ctermfg=green
 
