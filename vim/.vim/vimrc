@@ -25,7 +25,7 @@ syntax enable
 
 " Setting the RUNETIMEPATH
 let $RTP=split(&runtimepath, ',')[0]
-let $RC="HOME/.vim/vimrc"
+let $RC="$HOME/.vim/vimrc"
 set path=.,**
 
 highlight Comment ctermfg=green
