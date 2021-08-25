@@ -42,6 +42,9 @@ nnoremap <C-c> :set norelativenumber<CR>:set nonumber<CR>:echo "Line numbers tur
 noremap <C-n> :set number<CR>:set number<CR>:echo "Line numbers turned on."<CR>
 set wildmenu
 
+" Re-detect filetype
+nnoremap <leader>t :filetype detect<CR>
+
 " Disable stupid backup and swap files
 set nobackup
 set nowritebackup
