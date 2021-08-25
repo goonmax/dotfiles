@@ -34,24 +34,30 @@ highlight Comment ctermfg=green
 let mapleader      = ","
 let maplocalleader = ","
 
-"VIMRC edit
-nnoremap <leader>vrc :edit ~/.vim/vimrc<CR>
-set t_Co=256
-nnoremap <C-l> :nohl<CR><C-l>:echo "Search Cleared"<CR>
-nnoremap <C-c> :set norelativenumber<CR>:set nonumber<CR>:echo "Line numbers turned off."<C
-noremap <C-n> :set number<CR>:set number<CR>:echo "Line numbers turned on."<CR>
-set wildmenu
-
 " Re-detect filetype
 nnoremap <leader>t :filetype detect<CR>
 
-" Disable stupid backup and swap files
+"Setting{
+set wildmenu
+set t_Co=256
+setl wildignore=**/node_modules/**,**/dist/**,*.pyc
+set tags=./tags;,tags;            " Find tags relative to current file and directory
 set nobackup
 set nowritebackup
 set noswapfile
+set mouse=
+"}
 
+" Custom commands {{{
+nnoremap <leader>vrc :edit ~/.vim/vimrc<CR>
+nnoremap <C-l> :nohl<CR><C-l>:echo "Search Cleared"<CR>
+nnoremap <C-c> :set norelativenumber<CR>:set nonumber<CR>:echo "Line numbers turned off."<C
+noremap <C-n> :set number<CR>:set number<CR>:echo "Line numbers turned on."<CR>
+nnoremap <leader>m :!mkdir -p %:h<CR>
 set history=700     "Stores 700 Commands in history
 set undolevels=700  "Stores lots of undos
+" }}}
+
 
 " Remove trailing whitespace on save
 autocmd BufWritePre * call s:StripTrailing()
@@ -61,8 +67,6 @@ function! s:StripTrailing()
       %s/\s\+$//e
         call cursor(l, c)
         endfunction
-        " Disable Mouse Support
-set mouse=
 " Better copy & paste
 set pastetoggle=<F2>
 nnoremap <leader>b :ls<cr>:b<space>
