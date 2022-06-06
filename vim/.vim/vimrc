@@ -70,3 +70,15 @@ function! s:StripTrailing()
 " Better copy & paste
 set pastetoggle=<F2>
 nnoremap <leader>b :ls<cr>:b<space>
+
+
+
+" Clang format
+function FormatBuffer()
+  if &modified && !empty(findfile('.clang-format', expand('%:p:h') . ';'))
+    let cursor_pos = getpos('.')
+    :%!clang-format
+    call setpos('.', cursor_pos)
+  endif
+endfunction
+autocmd BufWritePre *.h,*.hpp,*.c,*.cpp,*.vert,*.frag :call FormatBuffer()
