@@ -1,7 +1,15 @@
 syntax on
-colorscheme peachpuff
 set expandtab
+"windo set sw=4 bs=2 ts=4
 set ai
+set wildmode=list:longest
+set printoptions=paper:a4
+set formatoptions=tcroqj
+set listchars=tab:>-,trail:$
+set splitbelow splitright
+set statusline=%<%{winnr()}\ %f\ %m%r%h%=\ 0x%02.B\ \ \ \ %-14.(%l/%L,%c%V%)\ %P
+windo set wrap
+windo set list number colorcolumn=80,132
 set ruler
 set paste
 set nocompatible
@@ -22,6 +30,8 @@ set hlsearch      " highlight search terms
 set incsearch     " show search matches as you type
 syntax enable
 
+" Tlist
+"map <F9> :TlistToggle
 
 " Setting the RUNETIMEPATH
 let $RTP=split(&runtimepath, ',')[0]
@@ -51,7 +61,7 @@ set mouse=
 " Custom commands {{{
 nnoremap <leader>vrc :edit ~/.vim/vimrc<CR>
 nnoremap <C-l> :nohl<CR><C-l>:echo "Search Cleared"<CR>
-nnoremap <C-c> :set norelativenumber<CR>:set nonumber<CR>:echo "Line numbers turned off."<C
+nnoremap <C-c> :set norelativenumber<CR>:set nonumber<CR>:echo "Line numbers turned off."<CR>
 noremap <C-n> :set number<CR>:set number<CR>:echo "Line numbers turned on."<CR>
 nnoremap <leader>m :!mkdir -p %:h<CR>
 set history=700     "Stores 700 Commands in history
@@ -81,4 +91,51 @@ function FormatBuffer()
     call setpos('.', cursor_pos)
   endif
 endfunction
+
+" auto buffer set
 autocmd BufWritePre *.h,*.hpp,*.c,*.cpp,*.vert,*.frag :call FormatBuffer()
+autocmd BufNewFile,BufRead *.[cCh] set cindent expandtab sw=2 ts=2 colorcolumn=80,132
+autocmd BufNewFile,BufRead *.cpp set cindent expandtab sw=2 ts=2 colorcolumn=80,132
+autocmd BufNewFile,BufRead *.java set cindent expandtab sw=2 ts=2 colorcolumn=80,132
+autocmd BufNewFile,BufRead *.sh set smartindent expandtab sw=2 ts=2 colorcolumn=80,132
+autocmd BufNewFile,BufRead *.xml set smartindent expandtab sw=2 ts=2 colorcolumn=80,132
+autocmd BufNewFile,BufRead [Mm]akefile,*.mk set tw=0 ai ts=4 sw=4 noexpandtab
+
+
+imap #ceb I/*75A*o$74A A*o75a*A/k^llR
+imap #cfb I/*75A*yyp0r yypA/k^llR
+nmap #fc /cell name="
+imap #fc #fc
+
+
+"imap @ifc 0@if ( CONFIG_ > 0 )T_i
+imap %ifc 0%if defined( CONFIG_ ) && ( CONFIG_ > 0 )^f_a
+imap %%% ^f_lyEf(Ep
+imap %eif 0%endif
+"imap @eic 0@endif /* CONFIG_ > 0 */T_i
+imap %eic 0%endif /% defined CONFIG_ && ( CONFIG_ > 0 ) %/^f_a
+
+" Colours..
+hi StatusLine ctermfg=lightgreen
+hi StatusLineNC ctermfg=lightblue
+hi VertSplit ctermfg=lightblue ctermbg=black
+hi LineNr ctermfg=240
+"hi Comment ctermfg=33
+hi Comment ctermfg=204
+hi SpecialKey ctermfg=238
+hi NonText ctermfg=247
+hi asmRegister ctermfg=99
+hi asmInstruction ctermfg=lightyellow
+hi Folded ctermfg=100 ctermbg=black
+"hi TabLineFill ctermbg=lightyellow ctermfg=238
+"hi TabLine ctermbg=lightmagenta ctermfg=238
+"hi TabLineFill ctermbg=blue ctermfg=black
+"hi TabLine ctermbg=203 ctermfg=black
+"hi TabLineSel ctermbg=213 ctermfg=black ctermul=white
+hi TabLine ctermbg=246 ctermfg=white
+hi TabLineSel ctermbg=203 ctermfg=white
+hi TabLineFill ctermbg=white ctermfg=238
+hi DiffChange ctermbg=97
+hi DiffText ctermbg=111
+hi ColorColumn ctermbg=234
+hi Search ctermbg=198 ctermfg=white
