@@ -11,7 +11,7 @@ set statusline=%<%{winnr()}\ %f\ %m%r%h%=\ 0x%02.B\ \ \ \ %-14.(%l/%L,%c%V%)\ %P
 windo set wrap
 windo set list number colorcolumn=80,132
 set ruler
-set paste
+"set paste
 set nocompatible
 set hidden
 set nowrap        " don't wrap lines
