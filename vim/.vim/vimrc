@@ -1,4 +1,6 @@
 syntax on
+filetype plugin on
+filetype plugin indent on
 set expandtab
 "windo set sw=4 bs=2 ts=4
 set ai
