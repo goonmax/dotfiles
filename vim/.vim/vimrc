@@ -141,3 +141,7 @@ hi DiffChange ctermbg=97
 hi DiffText ctermbg=111
 hi ColorColumn ctermbg=234
 hi Search ctermbg=198 ctermfg=white
+
+" convert spaces to tabs on save
+autocmd BufWritePre * :retab
+
