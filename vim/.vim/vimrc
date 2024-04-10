@@ -4,7 +4,7 @@ filetype plugin indent on
 set expandtab
 "windo set sw=4 bs=2 ts=4
 set ai
-set wildmode=list:longest
+"set wildmode=list:longest
 set printoptions=paper:a4
 set formatoptions=tcroqj
 set listchars=tab:>-,trail:$
@@ -110,12 +110,12 @@ nmap #fc /cell name="
 imap #fc #fc
 
 
-"imap @ifc 0@if ( CONFIG_ > 0 )T_i
-imap %ifc 0%if defined( CONFIG_ ) && ( CONFIG_ > 0 )^f_a
-imap %%% ^f_lyEf(Ep
-imap %eif 0%endif
-"imap @eic 0@endif /* CONFIG_ > 0 */T_i
-imap %eic 0%endif /% defined CONFIG_ && ( CONFIG_ > 0 ) %/^f_a
+"imap @ifc 0@if ( CONFIG_ > 0 )T_i
+imap %ifc 0%if defined( CONFIG_ ) && ( CONFIG_ > 0 )^f_a
+imap %%% ^f_lyEf(Ep
+imap %eif 0%endif
+"imap @eic 0@endif /* CONFIG_ > 0 */T_i
+imap %eic 0%endif /% defined CONFIG_ && ( CONFIG_ > 0 ) %/^f_a
 
 " Colours..
 hi StatusLine ctermfg=lightgreen
@@ -144,4 +144,3 @@ hi Search ctermbg=198 ctermfg=white
 
 " convert spaces to tabs on save
 autocmd BufWritePre * :retab
-
