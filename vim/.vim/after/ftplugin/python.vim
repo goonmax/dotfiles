@@ -22,3 +22,4 @@ function! PyInclude(fname)
 endfunction
 setlocal includeexpr=PyInclude(v:fname)
 setlocal define=^\\s*\\<\\(def\\\|class\\)\\>
+setlocal keywordprg=pydoc
