@@ -1,10 +1,12 @@
 set shiftwidth=4 tabstop=4 softtabstop=4 expandtab autoindent smartindent
 setlocal colorcolumn=80
-
+autocmd BufNewFile,BufRead *.py set keywordprg=pydoc3.11
 setlocal path=.,**
 setlocal wildignore=*/__pycache__/*,*.pyc
+setlocal include=^\\s*\\(from\\\|import\\)\\s*\\zs\\(\\S\\+\\s\\{-}\\)*\\ze\\($\\\|\ as\\)
+setlocal define=^\\s*\\\\(def\\\|class\\)\\>
+setlocal includeexpr=PyInclude(v:fname)
 
-set include=^\\s*\\(from\\import\\)\\s*\\zs\\(\\S\\+\\s\\{-}\\)*\\ze\\($\\\|\ as\\)
 
 function! PyInclude(fname)
     let parts = split(a:fname, 'import ')
@@ -22,4 +24,5 @@ function! PyInclude(fname)
 endfunction
 setlocal includeexpr=PyInclude(v:fname)
 setlocal define=^\\s*\\<\\(def\\\|class\\)\\>
-setlocal keywordprg=pydoc
+setlocal keywordprg=:!python3\ -m\ pydoc
+
