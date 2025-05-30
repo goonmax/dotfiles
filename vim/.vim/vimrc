@@ -102,6 +102,7 @@ autocmd BufNewFile,BufRead *.java set cindent expandtab sw=2 ts=2 colorcolumn=80
 autocmd BufNewFile,BufRead *.sh set smartindent expandtab sw=2 ts=2 colorcolumn=80,132
 autocmd BufNewFile,BufRead *.xml set smartindent expandtab sw=2 ts=2 colorcolumn=80,132
 autocmd BufNewFile,BufRead [Mm]akefile,*.mk set tw=0 ai ts=4 sw=4 noexpandtab
+autocmd FileType python compiler pythonenv
 
 
 imap #ceb I/*75A*o$74A A*o75a*A/k^llR
