@@ -1,10 +1,6 @@
-# ~/.zshrc file for zsh non-login shells.
-# see /usr/share/doc/zsh/examples/zshrc for examples
-
 setopt autocd              # change directory just by typing its name
-#setopt correct            # auto correct mistakes
+setopt correct            # auto correct mistakes
 setopt interactivecomments # allow comments in interactive mode
-setopt ksharrays           # arrays start at 0
 setopt magicequalsubst     # enable filename expansion for arguments of the form ‘anything=expression’
 setopt nonomatch           # hide error message if there is no match for the pattern
 setopt notify              # report the status of background jobs immediately
@@ -14,27 +10,37 @@ setopt promptsubst         # enable command substitution in prompt
 WORDCHARS=${WORDCHARS//\/} # Don't consider certain characters part of the word
 
 # hide EOL sign ('%')
-export PROMPT_EOL_MARK=""
+PROMPT_EOL_MARK=""
 
 # configure key keybindings
 bindkey -e                                        # emacs key bindings
 bindkey ' ' magic-space                           # do history expansion on space
 bindkey '^[[3;5~' kill-word                       # ctrl + Supr
-bindkey '^[[1;5C' forward-word                    # ctrl + ->
-bindkey '^[[C' forward-word                       # ctrl + ->
-bindkey '^[[1;5D' backward-word                   # ctrl + <-
-bindkey '^[[D' backward-word                      # ctrl + <-
+bindkey '^[[3~' delete-char                       # delete
+bindkey '^[[1;3C' forward-word                    # ctrl + -> linux
+bindkey '^[[1;3D' backward-word                   # ctrl + <- linux
 bindkey '^[[5~' beginning-of-buffer-or-history    # page up
 bindkey '^[[6~' end-of-buffer-or-history          # page down
+bindkey '^[[H' beginning-of-line                  # home
+bindkey '^[[F' end-of-line                        # end
 bindkey '^[[Z' undo                               # shift + tab undo last action
-#macos linux forward and backwards keys
-# bindkey '^[[1;3C' forward-word                    # ctrl + ->
-#bindkey '^[[1;3D' backward-word                   # ctrl + <-
+
 # enable completion features
 autoload -Uz compinit
 compinit -d ~/.cache/zcompdump
 zstyle ':completion:*:*:*:*:*' menu select
-zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' # case insensitive tab completion
+zstyle ':completion:*' auto-description 'specify: %d'
+zstyle ':completion:*' completer _expand _complete
+zstyle ':completion:*' format 'Completing %d'
+zstyle ':completion:*' group-name ''
+zstyle ':completion:*' list-colors ''
+zstyle ':completion:*' list-prompt %SAt %p: Hit TAB for more, or the character to insert%s
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
+zstyle ':completion:*' rehash true
+zstyle ':completion:*' select-prompt %SScrolling active: current selection at %p%s
+zstyle ':completion:*' use-compctl false
+zstyle ':completion:*' verbose true
+zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
 
 # History configurations
 HISTFILE=~/.zsh_history
@@ -48,6 +54,9 @@ setopt hist_verify            # show command with history expansion to user befo
 
 # force zsh to show the complete history
 alias history="history 0"
+
+# configure `time` format
+TIMEFMT=$'\nreal\t%E\nuser\t%U\nsys\t%S\ncpu\t%P'
 
 # make less more friendly for non-text input files, see lesspipe(1)
 #[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
@@ -69,97 +78,130 @@ force_color_prompt=yes
 
 if [ -n "$force_color_prompt" ]; then
     if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
-    # We have color support; assume it's compliant with Ecma-48
-    # (ISO/IEC-6429). (Lack of such support is extremely rare, and such
-    # a case would tend to support setf rather than setaf.)
-    color_prompt=yes
+        # We have color support; assume it's compliant with Ecma-48
+        # (ISO/IEC-6429). (Lack of such support is extremely rare, and such
+        # a case would tend to support setf rather than setaf.)
+        color_prompt=yes
     else
-    color_prompt=
+        color_prompt=
     fi
 fi
 
+configure_prompt() {
+    prompt_symbol=㉿
+    [ "$EUID" -eq 0 ] && prompt_symbol=💀
+    case "$PROMPT_ALTERNATIVE" in
+        twoline)
+            PROMPT=$'\033[01;30m[`date  +"%d-%b-%y %T %Z"`]\e[0m\n%F{%(#.blue.green)}┌──${debian_chroot:+($debian_chroot)─}${VIRTUAL_ENV:+($(basename $VIRTUAL_ENV))─}(%B%F{%(#.red.blue)}%n$prompt_symbol%m%b%F{%(#.blue.green)})-[%B%F{reset}%(6~.%-1~/…/%4~.%5~)%b%F{%(#.blue.green)}]\n└─%B%(#.%F{red}#.%F{blue}$)%b%F{reset} '
+            RPROMPT=$'\033[01;30m[`date  +"%d-%b-%y %T %Z"`]\e[0m\n%(?.. %? %F{red}%B⨯%b%F{reset})%(1j. %j %F{yellow}%B⚙%b%F{reset}.)'
+            ;;
+        oneline)
+            PROMPT=$'\033[01;30m[`date  +"%d-%b-%y %T %Z"`]\e[0m\n${debian_chroot:+($debian_chroot)}${VIRTUAL_ENV:+($(basename $VIRTUAL_ENV))}%B%F{%(#.red.blue)}%n@%m%b%F{reset}:%B%F{%(#.blue.green)}%~%b%F{reset}%(#.#.$) '
+            RPROMPT=
+            ;;
+        backtrack)
+            PROMPT=$'\033[01;30m[`date  +"%d-%b-%y %T %Z"`]\e[0m\n${debian_chroot:+($debian_chroot)}${VIRTUAL_ENV:+($(basename $VIRTUAL_ENV))}%B%F{red}%n@%m%b%F{reset}:%B%F{blue}%~%b%F{reset}%(#.#.$) '
+            RPROMPT=
+            ;;
+    esac
+}
+
+# The following block is surrounded by two delimiters.
+# These delimiters must not be modified. Thanks.
+# START KALI CONFIG VARIABLES
+PROMPT_ALTERNATIVE=twoline
+NEWLINE_BEFORE_PROMPT=yes
+# STOP KALI CONFIG VARIABLES
+
 if [ "$color_prompt" = yes ]; then
-    PROMPT=$'%F{%(#.blue.green)}┌──${debian_chroot:+($debian_chroot)──}(%B%F{%(#.red.blue)}%n%(#.💀.㉿)%m%b%F{%(#.blue.green)})-[%B%F{reset}%(6~.%-1~/…/%4~.%5~)%b%F{%(#.blue.green)}]\n└─%B%(#.%F{red}#.%F{blue}$)%b%F{reset} '
-    RPROMPT=$'%(?.. %? %F{red}%B⨯%b%F{reset})%(1j. %j %F{yellow}%B⚙%b%F{reset}.)'
+    # override default virtualenv indicator in prompt
+    VIRTUAL_ENV_DISABLE_PROMPT=1
+
+    configure_prompt
 
     # enable syntax-highlighting
-    #if [ -f /home/kali/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ] && [ "$color_prompt" = yes ]; then
-    if [ -f  /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh ] && [ "$color_prompt" = yes ]; then
-    # ksharrays breaks the plugin. This is fixed now but let's disable it in the
-    # meantime.
-    # https://github.com/zsh-users/zsh-syntax-highlighting/pull/689
-    unsetopt ksharrays
-    #. /home/kali/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-    . /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-    ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern)
-    ZSH_HIGHLIGHT_STYLES[default]=none
-    ZSH_HIGHLIGHT_STYLES[unknown-token]=fg=red,bold
-    ZSH_HIGHLIGHT_STYLES[reserved-word]=fg=cyan,bold
-    ZSH_HIGHLIGHT_STYLES[suffix-alias]=fg=green,underline
-    ZSH_HIGHLIGHT_STYLES[global-alias]=fg=magenta
-    ZSH_HIGHLIGHT_STYLES[precommand]=fg=green,underline
-    ZSH_HIGHLIGHT_STYLES[commandseparator]=fg=blue,bold
-    ZSH_HIGHLIGHT_STYLES[autodirectory]=fg=green,underline
-    ZSH_HIGHLIGHT_STYLES[path]=underline
-    ZSH_HIGHLIGHT_STYLES[path_pathseparator]=
-    ZSH_HIGHLIGHT_STYLES[path_prefix_pathseparator]=
-    ZSH_HIGHLIGHT_STYLES[globbing]=fg=blue,bold
-    ZSH_HIGHLIGHT_STYLES[history-expansion]=fg=blue,bold
-    ZSH_HIGHLIGHT_STYLES[command-substitution]=none
-    ZSH_HIGHLIGHT_STYLES[command-substitution-delimiter]=fg=magenta
-    ZSH_HIGHLIGHT_STYLES[process-substitution]=none
-    ZSH_HIGHLIGHT_STYLES[process-substitution-delimiter]=fg=magenta
-    ZSH_HIGHLIGHT_STYLES[single-hyphen-option]=fg=magenta
-    ZSH_HIGHLIGHT_STYLES[double-hyphen-option]=fg=magenta
-    ZSH_HIGHLIGHT_STYLES[back-quoted-argument]=none
-    ZSH_HIGHLIGHT_STYLES[back-quoted-argument-delimiter]=fg=blue,bold
-    ZSH_HIGHLIGHT_STYLES[single-quoted-argument]=fg=yellow
-    ZSH_HIGHLIGHT_STYLES[double-quoted-argument]=fg=yellow
-    ZSH_HIGHLIGHT_STYLES[dollar-quoted-argument]=fg=yellow
-    ZSH_HIGHLIGHT_STYLES[rc-quote]=fg=magenta
-    ZSH_HIGHLIGHT_STYLES[dollar-double-quoted-argument]=fg=magenta
-    ZSH_HIGHLIGHT_STYLES[back-double-quoted-argument]=fg=magenta
-    ZSH_HIGHLIGHT_STYLES[back-dollar-quoted-argument]=fg=magenta
-    ZSH_HIGHLIGHT_STYLES[assign]=none
-    ZSH_HIGHLIGHT_STYLES[redirection]=fg=blue,bold
-    ZSH_HIGHLIGHT_STYLES[comment]=fg=black,bold
-    ZSH_HIGHLIGHT_STYLES[named-fd]=none
-    ZSH_HIGHLIGHT_STYLES[numeric-fd]=none
-    ZSH_HIGHLIGHT_STYLES[arg0]=fg=green
-    ZSH_HIGHLIGHT_STYLES[bracket-error]=fg=red,bold
-    ZSH_HIGHLIGHT_STYLES[bracket-level-1]=fg=blue,bold
-    ZSH_HIGHLIGHT_STYLES[bracket-level-2]=fg=green,bold
-    ZSH_HIGHLIGHT_STYLES[bracket-level-3]=fg=magenta,bold
-    ZSH_HIGHLIGHT_STYLES[bracket-level-4]=fg=yellow,bold
-    ZSH_HIGHLIGHT_STYLES[bracket-level-5]=fg=cyan,bold
-    ZSH_HIGHLIGHT_STYLES[cursor-matchingbracket]=standout
+    if [ -f /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ] && [ "$color_prompt" = yes ]; then
+        . /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+        ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern)
+        ZSH_HIGHLIGHT_STYLES[default]=none
+        ZSH_HIGHLIGHT_STYLES[unknown-token]=fg=red,bold
+        ZSH_HIGHLIGHT_STYLES[reserved-word]=fg=cyan,bold
+        ZSH_HIGHLIGHT_STYLES[suffix-alias]=fg=green,underline
+        ZSH_HIGHLIGHT_STYLES[global-alias]=fg=magenta
+        ZSH_HIGHLIGHT_STYLES[precommand]=fg=green,underline
+        ZSH_HIGHLIGHT_STYLES[commandseparator]=fg=blue,bold
+        ZSH_HIGHLIGHT_STYLES[autodirectory]=fg=green,underline
+        ZSH_HIGHLIGHT_STYLES[path]=underline
+        ZSH_HIGHLIGHT_STYLES[path_pathseparator]=
+        ZSH_HIGHLIGHT_STYLES[path_prefix_pathseparator]=
+        ZSH_HIGHLIGHT_STYLES[globbing]=fg=blue,bold
+        ZSH_HIGHLIGHT_STYLES[history-expansion]=fg=blue,bold
+        ZSH_HIGHLIGHT_STYLES[command-substitution]=none
+        ZSH_HIGHLIGHT_STYLES[command-substitution-delimiter]=fg=magenta
+        ZSH_HIGHLIGHT_STYLES[process-substitution]=none
+        ZSH_HIGHLIGHT_STYLES[process-substitution-delimiter]=fg=magenta
+        ZSH_HIGHLIGHT_STYLES[single-hyphen-option]=fg=magenta
+        ZSH_HIGHLIGHT_STYLES[double-hyphen-option]=fg=magenta
+        ZSH_HIGHLIGHT_STYLES[back-quoted-argument]=none
+        ZSH_HIGHLIGHT_STYLES[back-quoted-argument-delimiter]=fg=blue,bold
+        ZSH_HIGHLIGHT_STYLES[single-quoted-argument]=fg=yellow
+        ZSH_HIGHLIGHT_STYLES[double-quoted-argument]=fg=yellow
+        ZSH_HIGHLIGHT_STYLES[dollar-quoted-argument]=fg=yellow
+        ZSH_HIGHLIGHT_STYLES[rc-quote]=fg=magenta
+        ZSH_HIGHLIGHT_STYLES[dollar-double-quoted-argument]=fg=magenta
+        ZSH_HIGHLIGHT_STYLES[back-double-quoted-argument]=fg=magenta
+        ZSH_HIGHLIGHT_STYLES[back-dollar-quoted-argument]=fg=magenta
+        ZSH_HIGHLIGHT_STYLES[assign]=none
+        ZSH_HIGHLIGHT_STYLES[redirection]=fg=blue,bold
+        ZSH_HIGHLIGHT_STYLES[comment]=fg=black,bold
+        ZSH_HIGHLIGHT_STYLES[named-fd]=none
+        ZSH_HIGHLIGHT_STYLES[numeric-fd]=none
+        ZSH_HIGHLIGHT_STYLES[arg0]=fg=green
+        ZSH_HIGHLIGHT_STYLES[bracket-error]=fg=red,bold
+        ZSH_HIGHLIGHT_STYLES[bracket-level-1]=fg=blue,bold
+        ZSH_HIGHLIGHT_STYLES[bracket-level-2]=fg=green,bold
+        ZSH_HIGHLIGHT_STYLES[bracket-level-3]=fg=magenta,bold
+        ZSH_HIGHLIGHT_STYLES[bracket-level-4]=fg=yellow,bold
+        ZSH_HIGHLIGHT_STYLES[bracket-level-5]=fg=cyan,bold
+        ZSH_HIGHLIGHT_STYLES[cursor-matchingbracket]=standout
     fi
 else
     PROMPT='${debian_chroot:+($debian_chroot)}%n@%m:%~%# '
 fi
 unset color_prompt force_color_prompt
 
+toggle_oneline_prompt(){
+    if [ "$PROMPT_ALTERNATIVE" = oneline ]; then
+        PROMPT_ALTERNATIVE=twoline
+    else
+        PROMPT_ALTERNATIVE=oneline
+    fi
+    configure_prompt
+    zle reset-prompt
+}
+zle -N toggle_oneline_prompt
+bindkey ^P toggle_oneline_prompt
+
 # If this is an xterm set the title to user@host:dir
 case "$TERM" in
-xterm*|rxvt*)
-    TERM_TITLE='\e]0;${debian_chroot:+($debian_chroot)}%n@%m: %~\a'
+xterm*|rxvt*|Eterm|aterm|kterm|gnome*|alacritty)
+    TERM_TITLE=$'\e]0;${debian_chroot:+($debian_chroot)}${VIRTUAL_ENV:+($(basename $VIRTUAL_ENV))}%n@%m: %~\a'
     ;;
 *)
     ;;
 esac
 
-new_line_before_prompt=yes
 precmd() {
     # Print the previously configured title
-    print -Pn "$TERM_TITLE"
+    print -Pnr -- "$TERM_TITLE"
 
     # Print a new line before the prompt, but only if it is not the first line
-    if [ "$new_line_before_prompt" = yes ]; then
-    if [ -z "$_NEW_LINE_BEFORE_PROMPT" ]; then
-        _NEW_LINE_BEFORE_PROMPT=1
-    else
-        print ""
-    fi
+    if [ "$NEWLINE_BEFORE_PROMPT" = yes ]; then
+        if [ -z "$_NEW_LINE_BEFORE_PROMPT" ]; then
+            _NEW_LINE_BEFORE_PROMPT=1
+        else
+            print ""
+        fi
     fi
 }
 
@@ -186,19 +228,14 @@ if [ -x /usr/bin/dircolors ]; then
 
     # Take advantage of $LS_COLORS for completion as well
     zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
+    zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
 fi
-
-HIST_STAMPS="yyyy-mm-dd"
-HISTSIZE=10000
-SAVEHIST=10000
-
+export EDITOR='nvim'
 # some more ls aliases
-alias ll='ls -la'
+alias ll='ls -al'
 alias la='ls -A'
 alias l='ls -CF'
-alias obsidian='/opt/obsidian/Obsidian-0.11.9.AppImage 2> /dev/null 1>&2 &'
-export PATH="$PATH:/home/kali/.local/bin"
-
+alias e='$EDITOR'
 
 # enable auto-suggestions based on the history
 if [ -f /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh ]; then
@@ -206,13 +243,71 @@ if [ -f /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh ]; then
     # change suggestion color
     ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=#999'
 fi
-setxkbmap -layout us -option ctrl:nocaps
 
-[[ -s "/home/kali/.sdkman/bin/sdkman-init.sh" ]] && source "/home/kali/.sdkman/bin/sdkman-init.sh"
+# enable command-not-found if installed
+if [ -f /etc/zsh_command_not_found ]; then
+    . /etc/zsh_command_not_found
+fi
+export DOTNET_CLI_TELEMETRY_OPTOUT=1
+
+alias dockershell="sudo docker run --rm -i -t --entrypoint=/bin/bash"
+alias dockershellsh="sudo docker run --rm -i -t --entrypoint=/bin/sh"
+
+
+alias ob="/opt/obsidian/Obsidian-1.5.3-arm64.AppImage&"
+
+function dockershellhere() {
+            dirname=${PWD##*/}
+            sudo docker run --rm -it --entrypoint=/bin/bash -v `pwd`:/${dirname} -w /${dirname} "$@"
+    }
+function dockershellshhere() {
+            dirname=${PWD##*/}
+            sudo docker run --rm -it --entrypoint=/bin/sh -v `pwd`:/${dirname} -w /${dirname} "$@"
+    }
+source ~/.zplug/init.zsh
+# needed for the newest version of plugins/git
+#zplug "lib/async_prompt", from:oh-my-zsh
+#zplug "plugins/git", from:oh-my-zsh, defer:1
+#zplug "lib/history", from:oh-my-zsh
+#zplug "junegunn/fzf", use:"shell/*.zsh"
+#zplug "zsh-users/zsh-completions"
+##zplug "zsh-users/zsh-syntax-highlighting", defer:2
+#zplug "zsh-users/zsh-history-substring-search", defer:2
+#zplug "woefe/git-prompt.zsh", use:"git-prompt.zsh"
+## We must call this second so that git-prompt can have a chance to initalize
+#zplug "~/.zsh", from:local, use:"classyTouch.zsh-theme", defer:3
+#zplug load
+
+ipb() {
+    if [ ! -n "$1" ]; then
+        command ip -c -br a
+    else
+        command ip -c $@
+    fi
+}
+
+# Created by `pipx` on 2021-11-30 20:49:06
+export PATH="$PATH:/home/parallels/.local/bin"
+
+# Adding Rust bin folder to Path
+export PATH="$PATH:/home/parallels/.cargo/bin"
+
 export PYENV_ROOT="$HOME/.pyenv"
 export PATH="$PYENV_ROOT/bin:$PATH"
 if command -v pyenv 1>/dev/null 2>&1; then
-  eval "$(pyenv init -)"
+  eval "$(pyenv init --path)"
 fi
+
+export GOROOT=/usr/lib/go
+export GOPATH=$HOME/go
+export PATH=$GOPATH/bin:$GOROOT/bin:$PATH
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
-export SDKMAN_DIR="/home/kali/.sdkman"
+export SDKMAN_DIR="$HOME/.sdkman"
+[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
+
+/usr/bin/neofetch --color_blocks off
+
+typeset -Ag bright_color fg_bright_bold
+
+[ -f /usr/bin/mise ] && eval "$(/usr/bin/mise activate zsh)"
+[ -f /usr/bin/atuin ] && eval "$(atuin init zsh --disable-up-arrow)"
