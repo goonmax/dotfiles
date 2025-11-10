@@ -1,5 +1,7 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhistcnt =0
+let g:netrw_dirhistcnt =2
+let g:netrw_dirhist_2='/Users/che/.config/nvim/lua/lsp'
+let g:netrw_dirhist_1='/Users/che/.local/share/nvim/lazy/fzf'
 let g:netrw_dirhist_0='/home/parallels/code/zerosource/cryptopt'
 let g:netrw_dirhist_9='/home/parallels/code/zerosource'
 let g:netrw_dirhist_8='/home/parallels/code/zerosource/cryptopt'
@@ -8,5 +10,3 @@ let g:netrw_dirhist_6='/home/parallels/jwt_tool'
 let g:netrw_dirhist_5='/home/parallels/dotfiles/vim/.vim'
 let g:netrw_dirhist_4='/home/parallels/dotfiles/vim/.vim/compiler'
 let g:netrw_dirhist_3='/home/parallels/dotfiles/vim/.vim'
-let g:netrw_dirhist_2='/home/parallels/dotfiles/vim/.vim/after/ftplugin'
-let g:netrw_dirhist_1='/home/parallels/dotfiles/vim/.vim/after'

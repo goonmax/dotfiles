@@ -24,21 +24,28 @@ return{
     {'nvim-mini/mini.pairs', version = false },
     'junegunn/fzf',
     'junegunn/fzf.vim',
+    {"mason-org/mason.nvim", opts = { ui = { icons = { package_installed = "✓", package_pending = "➜",package_uninstalled = "✗" } } } },
     'mfussenegger/nvim-lint',
     'lewis6991/gitsigns.nvim',
+    'stevearc/conform.nvim',
+    "neovim/nvim-lspconfig",
     {"folke/persistence.nvim",
   event = "BufReadPre", -- this will only start session saving when an actual file was opened
   opts = {
     -- add any custom options here
   }
 },
-    --    { import = "plugins" },
-
-  },
-  -- Configure any other settings here. See the documentation for more details.
-  -- colorscheme that will be used when installing plugins.
-  -- install = { colorscheme = { "habamax" } },
-  -- automatically check for plugin updates
-  -- checker = { enabled = true },
+{
+        'saghen/blink.cmp',
+        build = 'cargo build --release',  -- compile the Rust backend
+        dependencies = {
+          'neovim/nvim-lspconfig',
+          'rafamadriz/friendly-snippets',
+        },
+        config = function()
+          require('plugin_configs.blink')  -- 👈 We'll create this file next
+        end,
+      },
+    },
   })
 }
