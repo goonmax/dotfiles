@@ -85,3 +85,19 @@ vim.opt.wildignore = vim.opt.wildignore + "*.class"
 -- need for bufferline I think
 vim.opt.termguicolors = true
 require("bufferline").setup{}
+
+-- ============================
+-- Remove trailing whitespace on save
+-- ============================
+vim.api.nvim_create_autocmd("BufWritePre", {
+  pattern = "*",
+  callback = function()
+    -- save current position
+    local pos = vim.api.nvim_win_get_cursor(0)
+    -- strip trailing whitespace silently
+    vim.cmd([[%s/\s\+$//e]])
+    -- restore cursor
+    vim.api.nvim_win_set_cursor(0, pos)
+  end
+})
+

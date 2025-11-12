@@ -20,4 +20,5 @@ require("lazy").setup({ { import = "plugin_configs" },  }, {
   change_detection = {
     notify = false,
   },
+  error
 })

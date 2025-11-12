@@ -40,6 +40,7 @@ return {
         "eslint_d",
 	"clangd",
 	"pyright",
+	"clang-format",
       },
     },
     dependencies = {

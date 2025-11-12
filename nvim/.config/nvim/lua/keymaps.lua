@@ -9,6 +9,7 @@ vim.keymap.set('n', '<C-n>', ':set number relativenumber<CR>:echo "Line numbers 
 vim.keymap.set('n', '<leader>m', ':!mkdir -p %:h<CR>', { silent = true })
 vim.keymap.set('n', '<leader>b', ':ls<CR>:b<Space>', { silent = false })
 vim.keymap.set('n', '<leader>f', '<Esc>:Files<CR>', opts)
+vim.keymap.set('n', '<leader>lf', vim.lsp.buf.format)
 vim.keymap.set('n', '<space>', function()
   vim.cmd('silent make')   -- runs :make quietly (fills quickfix)
   vim.cmd('redraw!')       -- force redraw
