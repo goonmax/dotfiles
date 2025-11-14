@@ -2,6 +2,7 @@
 -- NVIM CONFIG ==
 --===============
 vim.cmd('syntax enable')
+vim.opt.cursorline = true
 vim.cmd('filetype plugin indent on')
 vim.opt.autowrite = true
 
