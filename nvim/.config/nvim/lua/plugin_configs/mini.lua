@@ -7,9 +7,5 @@ return {
       require('mini.pairs').setup()
     end
   },
-  {
-    'nvim-mini/mini.pairs',
-    version = false,
-  },
 }
 

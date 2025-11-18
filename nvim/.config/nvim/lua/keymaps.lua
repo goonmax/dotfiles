@@ -6,6 +6,7 @@ vim.keymap.set('n', '<leader>vrc', ':edit ~/.config/nvim/init.lua<CR>', { silent
 vim.keymap.set('n', '<C-l>', ':nohl<CR><C-l>:echo "Search Cleared"<CR>', { silent = true })
 vim.keymap.set('n', '<C-c>', ':set norelativenumber nonumber<CR>:echo "Line numbers off"<CR>', { silent = true })
 vim.keymap.set('n', '<C-n>', ':set number relativenumber<CR>:echo "Line numbers on"<CR>', { silent = true })
+vim.keymap.set('n', '<Esc>', '<C-\\><C-n>', { silent = true })
 vim.keymap.set('n', '<leader>m', ':!mkdir -p %:h<CR>', { silent = true })
 vim.keymap.set('n', '<leader>b', ':ls<CR>:b<Space>', { silent = false })
 vim.keymap.set('n', '<leader>f', '<Esc>:Files<CR>', opts)
