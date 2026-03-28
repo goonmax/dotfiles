@@ -59,7 +59,7 @@ vim.o.splitright = true
 vim.o.splitbelow = true
 
 vim.o.list = true
-vim.opt.listchars = { tab = "» ", trail = "·", nbsp = "␣", eol = "$" }
+vim.opt.listchars = { tab = "» ", trail = "·", nbsp = "␣"}
 
 vim.o.timeoutlen = 1000
 -- vim.opt.pastetoggle    = '<F2>'
